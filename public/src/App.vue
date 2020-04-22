@@ -1,23 +1,21 @@
 <template>
-  <v-app>
-    HOlA QUE HACE
-    </v-app-bar>
-
-    <v-content>
+  <v-app id="app">
+    <v-content class="d-flex">
+      <router-view>
+        <router-link to="/auth"></router-link>
+      </router-view>
     </v-content>
   </v-app>
 </template>
 
 <script>
-
 export default {
-  name: 'App',
+  name: "App",
 
-  components: {
-  },
+  components: {},
 
   data: () => ({
     //
-  }),
+  })
 };
 </script>
