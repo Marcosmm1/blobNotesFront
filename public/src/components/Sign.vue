@@ -1,6 +1,6 @@
 <template>
   <v-row class="justify-center backg">
-    <v-card width="400px" height="460px">
+    <v-card width="400px" height="460px" class="backg card-color">
       <v-card-title class="pb-0 mb-10">
         <h1>Signup</h1>
       </v-card-title>
@@ -10,6 +10,7 @@
             class="mb-6"
             label="Username"
             v-model="username"
+            dark
             prepend-icon="mdi-account-circle"
             :rules="userRules"
           ></v-text-field>
@@ -17,6 +18,8 @@
           <v-text-field
             label="E-mail"
             v-model="email"
+            clearable
+            dark
             :rules="emailRules"
             prepend-icon="mdi-email"
             class="mb-10"
@@ -26,6 +29,7 @@
             class="mb-6"
             label="Password"
             v-model="userPassword"
+            dark
             :type="showPassword ? 'text' : 'password'"
             prepend-icon="mdi-lock"
             :rules="passwordRule"
@@ -91,5 +95,12 @@ export default {
 .backg {
   background-image: url("../assets/sticky.png");
   background-position: center;
+}
+.pad {
+  padding-top: 0%;
+  padding-bottom: 0%;
+}
+.card-color {
+  color: rgba(255, 255, 255, 0.787);
 }
 </style>

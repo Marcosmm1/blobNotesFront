@@ -1,6 +1,6 @@
 <template>
   <v-row class="justify-center backg">
-    <v-card width="400px" height="390px">
+    <v-card width="400px" height="400" class="backg card-color">
       <v-card-title class="pb-0 mb-10">
         <h1>Login</h1>
       </v-card-title>
@@ -8,14 +8,17 @@
         <v-form class="mb-10">
           <v-text-field
             class="mb-10"
+            clearable
             :label="errormsg"
             v-model="email"
+            dark
             prepend-icon="mdi-account-circle"
           ></v-text-field>
           <v-text-field
             class="mb-10"
             label="Password"
             v-model="userPassword"
+            dark
             :type="showPassword ? 'text' : 'password'"
             prepend-icon="mdi-lock"
             :rules="passwordRule"
@@ -78,5 +81,8 @@ export default {
 .backg {
   background-image: url("../assets/sticky.png");
   background-position: center;
+}
+.card-color {
+  color: rgba(255, 255, 255, 0.787) !important;
 }
 </style>
