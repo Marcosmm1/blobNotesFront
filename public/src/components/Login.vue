@@ -62,7 +62,7 @@ export default {
           } else {
             localStorage.setItem("token", response.token);
             localStorage.setItem("email", response.email);
-            this.$router.push("/home");
+            this.$router.push("/notes");
           }
         })
         .catch(err => console.log(err));

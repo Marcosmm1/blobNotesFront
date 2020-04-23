@@ -74,7 +74,6 @@ export default {
         .then(response => {
           localStorage.setItem("token", response.token);
           localStorage.setItem("email", response.email);
-          this.$router.push("/");
         })
         .catch(err => console.log(err));
     }

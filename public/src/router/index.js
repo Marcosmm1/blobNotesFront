@@ -1,21 +1,33 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Auth from "../views/Auth";
-import Home from '../views/Home.vue'
+import Auth from '../views/Auth'
+import Notes from '../views/Notes'
 
 Vue.use(VueRouter)
 
-const routes = [
+let Storage: {
+  new(): Storage;
+  prototype: Storage;
+}
+
+const routes = [{
+    path: '/notes',
+    name: 'Notes',
+    component: Notes,
+    beforeEnter(to, from, next) {
+      if (!localStorage.getItem('token')) {
+        next({
+          name: 'Auth'
+        })
+      }
+      next()
+    }
+  },
   {
     path: '/',
-    name: 'Home',
-    component: Home
-  },
-  {
-    path: "/auth",
-    name: "Auth",
+    name: 'Auth',
     component: Auth
-  },
+  }
 ]
 
 const router = new VueRouter({
