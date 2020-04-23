@@ -65,6 +65,7 @@ export default {
 .fondo {
   background-image: url("../assets/notes.png");
   background-position: center;
+  height: 100vh;
 }
 .pad {
   padding-top: 0%;

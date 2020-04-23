@@ -41,7 +41,7 @@
                       class="my-10 ml-6"
                       x-large
                       color="blue accent-3"
-                      v-on:click="createNote()"
+                      @click="addNote()"
                     >Crear Nota</v-btn>
                     <v-divider></v-divider>
                     <h2 class="my-10">Tu Nota:</h2>
@@ -52,11 +52,11 @@
                   <v-row class="justify-center">
                     <v-col cols="6">
                       <h5>Nombre para la nota:</h5>
-                      <v-text-field class="mt-2" label="Nota" outlined></v-text-field>
+                      <v-text-field class="mt-2" label="Nota" outlined v-model="name"></v-text-field>
                       <h5>Fecha para la nota:</h5>
-                      <v-text-field class="mt-2" label="Fecha" outlined></v-text-field>
+                      <v-text-field class="mt-2" label="Fecha" outlined v-model="date" type="date"></v-text-field>
                       <h5>Category</h5>
-                      <v-radio-group class="mt-4" v-model="radioGroup">
+                      <v-radio-group class="mt-4" v-model="radioGroup" :mandatory="false">
                         <v-radio v-for="n in values" :key="n" :label="n" :value="n"></v-radio>
                       </v-radio-group>
                     </v-col>
@@ -79,12 +79,16 @@
 
 <script>
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import API from "../services/api";
 
 export default {
   name: "notes",
   data() {
     return {
       values: ["work", "personal", "family", "general"],
+      category: "",
+      name: "",
+      date: "",
       search: "",
       tab: null,
       items: ["CREATE NOTE", "VER NOTAS"],
@@ -99,7 +103,15 @@ export default {
     emptyEditor() {
       this.editorData = "";
     },
-    createNote() {}
+    async addNote() {
+      var noteNew = {
+        title: this.name,
+        description: this.editorData,
+        category: this.values[0],
+        date: this.date
+      };
+      await API.addNoteToUser(noteNew);
+    }
   }
 };
 </script>
