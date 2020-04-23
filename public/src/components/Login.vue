@@ -40,9 +40,9 @@ export default {
       errormsg: "Email",
       isActive: true,
       hasError: false,
-      email: "",
+      email: "marcos@marcos.es",
       showPassword: false,
-      userPassword: "",
+      userPassword: "1234567890",
       passwordRule: [
         v => !!v || "Password is required",
         v => v.length >= 10 || "Password must be more than 10 characters"

@@ -1,6 +1,6 @@
 <template>
   <v-app id="app">
-    <v-content class="d-flex">
+    <v-content>
       <router-view>
         <router-link to="/auth"></router-link>
       </router-view>

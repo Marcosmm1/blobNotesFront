@@ -1,24 +1,24 @@
-import axios from "axios";
+import axios from 'axios'
 
 const API = axios.create({
-  baseURL: "process.env.VUE_APP_API_URL",
+  baseURL: 'http://localhost:3000/api',
   headers: {
-    Accept: "application/json",
-    "Content-Type": "application/json"
+    Accept: 'application/json',
+    'Content-Type': 'application/json'
   }
-});
+})
 
 export default {
   async signup(newUser) {
-    const response = await API.post("/auth/signup", {
+    const response = await API.post('/auth/signup', {
       ...newUser
-    });
-    return response.data;
+    })
+    return response.data
   },
   async login(user) {
-    const response = await API.post("/auth/login", {
+    const response = await API.post('/auth/login', {
       ...user
-    });
-    return response.data;
+    })
+    return response.data
   }
-};
+}
