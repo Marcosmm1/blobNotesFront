@@ -10,7 +10,7 @@ const routes = [{
   name: 'Notes',
   component: Notes,
   beforeEnter (to, from, next) {
-    if (!localStorage.getItem('token')) {
+    if (!localStorage.getItem('token')) { // eslint-disable-line
       next({
         name: 'Auth'
       })
