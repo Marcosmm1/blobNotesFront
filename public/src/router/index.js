@@ -5,29 +5,24 @@ import Notes from '../views/Notes'
 
 Vue.use(VueRouter)
 
-let Storage: {
-  new(): Storage;
-  prototype: Storage;
-}
-
 const routes = [{
-    path: '/notes',
-    name: 'Notes',
-    component: Notes,
-    beforeEnter(to, from, next) {
-      if (!localStorage.getItem('token')) {
-        next({
-          name: 'Auth'
-        })
-      }
-      next()
+  path: '/notes',
+  name: 'Notes',
+  component: Notes,
+  beforeEnter (to, from, next) {
+    if (!localStorage.getItem('token')) {
+      next({
+        name: 'Auth'
+      })
     }
-  },
-  {
-    path: '/',
-    name: 'Auth',
-    component: Auth
+    next()
   }
+},
+{
+  path: '/',
+  name: 'Auth',
+  component: Auth
+}
 ]
 
 const router = new VueRouter({

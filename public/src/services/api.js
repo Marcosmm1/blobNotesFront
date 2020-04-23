@@ -9,13 +9,13 @@ const API = axios.create({
 })
 
 export default {
-  async signup(newUser) {
+  async signup (newUser) {
     const response = await API.post('/auth/signup', {
       ...newUser
     })
     return response.data
   },
-  async login(user) {
+  async login (user) {
     const response = await API.post('/auth/login', {
       ...user
     })
