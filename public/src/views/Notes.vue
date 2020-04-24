@@ -79,6 +79,7 @@
                       @click="addNote()"
                     >Crear Nota</v-btn>
                     <v-btn
+                      v-else="editId"
                       class="my-10 ml-6"
                       x-large
                       color="blue accent-3"
@@ -168,9 +169,11 @@ export default {
       localStorage.clear();
       this.$router.push("/");
     },
-    filterNotes() {
-      API.getAllNotes(this.search, this.dates[0]);
-      response => (this.notes = response);
+    async filterNotes() {
+      API.getAllNotes(this.search, this.dates[0]).then(
+        response => (this.notes = response)
+      );
+      await (this.dates = []);
     },
     async addNote() {
       let noteNew = {
@@ -179,7 +182,8 @@ export default {
         category: this.category,
         date: this.date
       };
-      await API.addNoteToUser(noteNew);
+      API.addNoteToUser(noteNew);
+      await API.getAllNotes().then(response => (this.notes = response));
     },
     takeIdforEdit(noteId) {
       this.editId = noteId;
@@ -193,7 +197,7 @@ export default {
         date: this.date
       };
       API.editNote(note, this.editId);
-      await API.getAllNotes().then(response => (this.notes = response));
+      this.editId = false;
     }
   },
   created() {

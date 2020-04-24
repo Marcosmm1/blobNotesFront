@@ -8,15 +8,13 @@ const API = axios.create({
   }
 })
 export default {
-  async getAllNotes(category, date) {
+  async getAllNotes (category, date) {
     var url = '/me/notes?'
     if (category && date) {
       url += `category=${category}&date=${date}`
-    }
-    else if (date) {
+    } else if (date) {
       url += `date=${date}&`
-    }
-    else if (category) {
+    } else if (category) {
       url += `category=${category}&`
     }
     const response = await API.get(url, {
@@ -26,19 +24,19 @@ export default {
     })
     return response.data
   },
-  async signup(newUser) {
+  async signup (newUser) {
     const response = await API.post('/auth/signup', {
       ...newUser
     })
     return response.data
   },
-  async login(user) {
+  async login (user) {
     const response = await API.post('/auth/login', {
       ...user
     })
     return response.data
   },
-  async addNoteToUser(newNote) {
+  async addNoteToUser (newNote) {
     try {
       const response = await API.post('/me/notes', newNote, {
         headers: {
@@ -50,7 +48,7 @@ export default {
       console.log(error)
     }
   },
-  async editNote(note, noteId) {
+  async editNote (note, noteId) {
     const response = await API.put(`/me/notes/${noteId}`, note, {
       headers: {
         token: localStorage.token // eslint-disable-line
@@ -58,7 +56,7 @@ export default {
     })
     return response.data
   },
-  async deleteNote(note) {
+  async deleteNote (note) {
     try {
       const response = await API.delete(`/me/notes/${note}`, {
         headers: {
@@ -69,5 +67,5 @@ export default {
     } catch (error) {
       console.error(error)
     }
-  },
+  }
 }
