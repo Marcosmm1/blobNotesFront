@@ -15,6 +15,9 @@
           <v-img v-bind="props" gradient="to top right, rgba(100,115,201,.7), rgba(25,32,72,.7)"></v-img>
         </template>
         <h1 class="ml-10">Blog Notes</h1>
+        <v-divider></v-divider>
+        <span class="user">Hola {{ user}} !</span>
+
         <v-spacer></v-spacer>
         <v-spacer></v-spacer>
         <v-spacer></v-spacer>
@@ -60,6 +63,7 @@
         <template v-slot:extension>
           <v-tabs align-with-title v-model="tab">
             <v-tab class="mytab nav" v-for="tab in tabs" :key="tab">{{ tab }}</v-tab>
+
             <v-tabs-items v-model="tab" class="color">
               <v-tab-item>
                 <v-row>
@@ -137,6 +141,7 @@ export default {
   data() {
     return {
       dates: [],
+      user: localStorage.name,
       menu: false,
       editId: false,
       note: "",
@@ -216,5 +221,10 @@ export default {
   width: 100%;
   height: fit-content;
   border: 1px dotted black;
+}
+.user {
+  font-size: 50px;
+  font-style: oblique;
+  font-weight: 100;
 }
 </style>

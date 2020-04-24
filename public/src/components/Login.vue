@@ -65,6 +65,7 @@ export default {
           } else {
             localStorage.setItem("token", response.token);
             localStorage.setItem("email", response.email);
+            localStorage.setItem("name", response.name);
             this.$router.push("/notes");
           }
         })
