@@ -7,8 +7,19 @@ const API = axios.create({
     'Content-Type': 'application/json'
   }
 })
-
 export default {
+  async getAllNotes(category, date) {
+    var url = '/me/notes'
+    if (category && date) {
+      url += `?category=${category}&date=${date}`
+    }
+    const response = await API.get(url, {
+      headers: {
+        token: localStorage.token // eslint-disable-line
+      }
+    })
+    return response.data
+  },
   async signup(newUser) {
     const response = await API.post('/auth/signup', {
       ...newUser
@@ -21,28 +32,36 @@ export default {
     })
     return response.data
   },
-
-  // Función para crear nota
   async addNoteToUser(newNote) {
     try {
       const response = await API.post('/me/notes', newNote, {
         headers: {
-          token: localStorage.token
+          token: localStorage.token // eslint-disable-line
         }
       })
       return response.data
     } catch (error) {
       console.log(error)
     }
-  }
+  },
+  async editNote(note, noteId) {
+    const response = await API.put(`/me/notes/${noteId}`, note, {
+      headers: {
+        token: localStorage.token // eslint-disable-line
+      }
+    })
+    return response.data
+  },
+  async deleteNote(note) {
+    try {
+      const response = await API.delete(`/me/notes/${note}`, {
+        headers: {
+          token: localStorage.token // eslint-disable-line
+        }
+      })
+      return response.data
+    } catch (error) {
+      console.log(error)
+    }
+  },
 }
-
-// función para filtar por category
-/* async getCategory(category) {
-  let url = '/notes?'
-  if (category) {
-    url += `category=${category}&`
-  }
-  const response = await API.get(url)
-  return response.data
-} */

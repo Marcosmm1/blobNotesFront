@@ -18,13 +18,41 @@
         <v-spacer></v-spacer>
         <v-spacer></v-spacer>
         <v-spacer></v-spacer>
-        <v-text-field v-model="search" label="Search" single-line hide-details></v-text-field>
+        <v-row cols="6" class="d-flex">
+          <v-col>
+            <v-menu
+              ref="menu"
+              v-model="menu"
+              :close-on-content-click="false"
+              :return-value.sync="dates"
+              transition="scale-transition"
+              offset-y
+              min-width="290px"
+            >
+              <template v-slot:activator="{ on }">
+                <v-combobox v-model="dates" multiple chips small-chips readonly v-on="on"></v-combobox>
+              </template>
+              <v-date-picker v-model="dates" multiple no-title scrollable>
+                <v-spacer></v-spacer>
+                <v-btn text color="primary" @click="menu = false">Cancel</v-btn>
+                <v-btn text color="primary" @click="$refs.menu.save(dates)">OK</v-btn>
+              </v-date-picker>
+            </v-menu>
+          </v-col>
+          <v-col cols="6">
+            <v-text-field class="mr-10" v-model="search" label="Search" single-line hide-details></v-text-field>
+          </v-col>
+        </v-row>
+        <!--  <input v-model="date" type="date" color="green lighten-1"></input> -->
         <v-btn icon>
-          <v-icon x-large>mdi-magnify</v-icon>
+          <v-icon @click="filterNotes" x-large>mdi-magnify</v-icon>
+        </v-btn>
+        <v-btn @click="logout" icon>
+          <v-icon x-large>mdi-location-exit</v-icon>
         </v-btn>
         <template v-slot:extension>
           <v-tabs align-with-title v-model="tab">
-            <v-tab class="mytab nav" v-for="item in items" :key="item">{{ item }}</v-tab>
+            <v-tab class="mytab nav" v-for="tab in tabs" :key="tab">{{ tab }}</v-tab>
             <v-tabs-items v-model="tab" class="color">
               <v-tab-item>
                 <v-row>
@@ -36,13 +64,19 @@
                       color="green lighten-2"
                       v-on:click="emptyEditor()"
                     >Limpiar</v-btn>
-
                     <v-btn
+                      v-if="!editId"
                       class="my-10 ml-6"
                       x-large
                       color="blue accent-3"
                       @click="addNote()"
                     >Crear Nota</v-btn>
+                    <v-btn
+                      class="my-10 ml-6"
+                      x-large
+                      color="blue accent-3"
+                      @click="editNote()"
+                    >Editar</v-btn>
                     <v-divider></v-divider>
                     <h2 class="my-10">Tu Nota:</h2>
                     <p class="nota">
@@ -53,18 +87,22 @@
                     <v-col cols="6">
                       <h5>Nombre para la nota:</h5>
                       <v-text-field class="mt-2" label="Nota" outlined v-model="name"></v-text-field>
-                      <h5>Fecha para la nota:</h5>
-                      <v-text-field class="mt-2" label="Fecha" outlined v-model="date" type="date"></v-text-field>
                       <h5>Category</h5>
-                      <v-radio-group class="mt-4" v-model="radioGroup" :mandatory="false">
+                      <v-radio-group class="mt-4" v-model="category" :mandatory="false">
                         <v-radio v-for="n in values" :key="n" :label="n" :value="n"></v-radio>
                       </v-radio-group>
+                      <h5>Fecha para la nota:</h5>
+                      <v-date-picker class="mt-2" v-model="date" color="green lighten-1"></v-date-picker>
                     </v-col>
                   </v-row>
                 </v-row>
               </v-tab-item>
               <v-tab-item>
-                <v-col>NOTAS AQUI</v-col>
+                <v-row>
+                  <v-col v-for="(note, i) in notes" :key="i" cols="4">
+                    <Note :note="notes[i]" v-on:editNote="takeIdforEdit" />
+                  </v-col>
+                </v-row>
               </v-tab-item>
             </v-tabs-items>
           </v-tabs>
@@ -80,18 +118,24 @@
 <script>
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import API from "../services/api";
+import Note from "../components/Note";
 
 export default {
   name: "notes",
   data() {
     return {
+      dates: [],
+      menu: false,
+      editId: false,
+      note: "",
+      notes: [],
       values: ["work", "personal", "family", "general"],
       category: "",
       name: "",
       date: "",
       search: "",
       tab: null,
-      items: ["CREATE NOTE", "VER NOTAS"],
+      tabs: ["CREATE NOTE", "SHOW MY NOTES"],
       editor: ClassicEditor,
       editorData: "<p>Tu nota.</p>",
       editorConfig: {
@@ -99,19 +143,49 @@ export default {
       }
     };
   },
+  components: {
+    Note
+  },
   methods: {
     emptyEditor() {
       this.editorData = "";
     },
+    logout() {
+      localStorage.clear();
+      this.$router.push("/");
+    },
+    filterNotes() {
+      API.getAllNotes(this.search, this.dates[0]).then(
+        response => (this.notes = response)
+      );
+    },
     async addNote() {
-      var noteNew = {
+      let noteNew = {
         title: this.name,
         description: this.editorData,
-        category: this.values[0],
+        category: this.category,
         date: this.date
       };
       await API.addNoteToUser(noteNew);
+    },
+    takeIdforEdit(noteId) {
+      this.editId = noteId;
+      this.tab = 0;
+    },
+    async editNote() {
+      let note = {
+        title: this.name,
+        description: this.editorData,
+        category: this.category,
+        date: this.date
+      };
+      API.editNote(note, this.editId);
     }
+  },
+  created() {
+    API.getAllNotes(this.search, this.dates[0]).then(
+      response => (this.notes = response)
+    );
   }
 };
 </script>
