@@ -203,6 +203,7 @@ export default {
       };
       API.editNote(note, this.editId);
       this.editId = false;
+      await API.getAllNotes().then(response => (this.notes = response));
     }
   },
   created() {
