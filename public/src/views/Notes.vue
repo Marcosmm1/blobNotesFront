@@ -40,7 +40,14 @@
             </v-menu>
           </v-col>
           <v-col cols="6">
-            <v-text-field class="mr-10" v-model="search" label="Search" single-line hide-details></v-text-field>
+            <v-text-field
+              @keydown.enter="filterNotes"
+              class="mr-10"
+              v-model="search"
+              label="Search"
+              single-line
+              hide-details
+            ></v-text-field>
           </v-col>
         </v-row>
         <!--  <input v-model="date" type="date" color="green lighten-1"></input> -->
@@ -100,7 +107,11 @@
               <v-tab-item>
                 <v-row>
                   <v-col v-for="(note, i) in notes" :key="i" cols="4">
-                    <Note :note="notes[i]" v-on:editNote="takeIdforEdit" />
+                    <Note
+                      :note="notes[i]"
+                      v-on:deleteNote="updateDeleted"
+                      v-on:editNote="takeIdforEdit"
+                    />
                   </v-col>
                 </v-row>
               </v-tab-item>
@@ -150,14 +161,16 @@ export default {
     emptyEditor() {
       this.editorData = "";
     },
+    updateDeleted() {
+      API.getAllNotes().then(response => (this.notes = response));
+    },
     logout() {
       localStorage.clear();
       this.$router.push("/");
     },
     filterNotes() {
-      API.getAllNotes(this.search, this.dates[0]).then(
-        response => (this.notes = response)
-      );
+      API.getAllNotes(this.search, this.dates[0]);
+      response => (this.notes = response);
     },
     async addNote() {
       let noteNew = {
@@ -180,6 +193,7 @@ export default {
         date: this.date
       };
       API.editNote(note, this.editId);
+      await API.getAllNotes().then(response => (this.notes = response));
     }
   },
   created() {

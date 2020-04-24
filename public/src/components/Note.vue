@@ -31,8 +31,7 @@ export default {
       this.$emit("editNote", this.note._id);
     },
     deleteNote() {
-      API.deleteNote(this.note._id);
-      this.$emit("deleteNote"); //intento de que actualize las notas solo
+      API.deleteNote(this.note._id).then(this.$emit("deleteNote"));
     }
   }
 };

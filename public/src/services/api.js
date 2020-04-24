@@ -9,9 +9,15 @@ const API = axios.create({
 })
 export default {
   async getAllNotes(category, date) {
-    var url = '/me/notes'
+    var url = '/me/notes?'
     if (category && date) {
-      url += `?category=${category}&date=${date}`
+      url += `category=${category}&date=${date}`
+    }
+    else if (date) {
+      url += `date=${date}&`
+    }
+    else if (category) {
+      url += `category=${category}&`
     }
     const response = await API.get(url, {
       headers: {
@@ -61,7 +67,7 @@ export default {
       })
       return response.data
     } catch (error) {
-      console.log(error)
+      console.error(error)
     }
   },
 }
